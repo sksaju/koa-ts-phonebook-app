@@ -6,10 +6,10 @@ const { findAll, create, findByMobile, update, remove } = new ContactController(
 
 
 //CONTACT ROUTES
-routers.get( '/contact/', findAll );
-routers.post( '/contact/', create );
-routers.get( '/contact/:mobile', findByMobile );
-routers.post( '/contact/:mobile', update );
-routers.delete( '/contact/:mobile', remove );
+routers.get( '/api/contacts/', findAll );
+routers.post( '/api/contacts/', create );
+routers.get( '/api/contacts/:mobile', findByMobile );
+routers.post( '/api/contacts/:mobile', update );
+routers.delete( '/api/contacts/:mobile', remove );
 
 export default routers;
