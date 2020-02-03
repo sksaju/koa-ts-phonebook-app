@@ -1,0 +1,64 @@
+{
+  "name": "koa-ts-phonebook-app",
+  "version": "1.0.0",
+  "description": "A simple Phonebook REST app using Node.js with Koa",
+  "main": "src/server.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "server": "node dist/server.js",
+    "watch-build": "tsc --watch",
+    "watch-test": "jest --watch",
+    "watch-server": "nodemon src/server.ts",
+    "dev": "concurrently npm:watch-*",
+    "start": "concurrently npm:build npm:server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sksaju/koa-ts-phonebook-app.git"
+  },
+  "author": "sksaju",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sksaju/koa-ts-phonebook-app/issues"
+  },
+  "homepage": "https://github.com/sksaju/koa-ts-phonebook-app#readme",
+  "dependencies": {
+    "@koa/cors": "^3.0.0",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^8.0.6",
+    "mongoose": "^5.8.11"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.1",
+    "@types/koa": "^2.11.0",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa__cors": "^3.0.1",
+    "@types/koa-router": "^7.4.0",
+    "@types/mongoose": "^5.7.0",
+    "@types/node": "^13.7.0",
+    "@types/superagent": "^4.1.4",
+    "@types/supertest": "^2.0.8",
+    "concurrently": "^5.1.0",
+    "jest": "^25.1.0",
+    "nodemon": "^2.0.2",
+    "supertest": "^4.0.2",
+    "ts-jest": "^25.1.0",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.7.5"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
+  }
+}

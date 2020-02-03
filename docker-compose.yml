@@ -1,0 +1,21 @@
+version: '3'
+services:
+  app:
+    image: koa-ts-phonebook-app
+    restart: always
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'
+  adminmongo:
+    image: mrvautin/adminmongo
+    restart: always
+    depends_on: 
+      - mongo
+    ports:
+      - 3636:3636
