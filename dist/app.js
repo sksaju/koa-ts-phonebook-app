@@ -21,9 +21,8 @@ class App {
         this.app.use(routes_1.default());
     }
     _setMongoConfig() {
-        const { MONGO_URL } = app_1.default;
         mongoose_1.default.Promise = global.Promise;
-        mongoose_1.default.connect(MONGO_URL, {
+        mongoose_1.default.connect(app_1.default.MONGO_URL, {
             useNewUrlParser: true
         })
             .then(() => console.log('MongoDB Connected'))
