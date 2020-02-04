@@ -13,6 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Contact_1 = __importDefault(require("../models/Contact"));
+const contactValidator_1 = __importDefault(require("../validators/contactValidator"));
 class ContactController {
     /**
      * Get all contacts
@@ -22,9 +23,7 @@ class ContactController {
      */
     static findAll(ctx) {
         return __awaiter(this, void 0, void 0, function* () {
-            // load all users
             const contacts = yield Contact_1.default.find();
-            // return OK status code and loaded users array
             ctx.status = 200;
             ctx.body = contacts;
         });
@@ -35,18 +34,19 @@ class ContactController {
      * @access    public
      * @return    {json} mixed
      */
-    findByMobile(ctx) {
-        const { mobile } = ctx.params.body;
-        Contact_1.default.find({ mobile })
-            .then(response => {
-            if (!response) {
-                ctx.throw(404, "Data not found");
+    static findByMobile(ctx) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { mobile } = ctx.params;
+            const contact = yield Contact_1.default.find({ mobile });
+            if (contact) {
+                ctx.status = 200;
+                ctx.body = contact;
             }
             else {
-                ctx.body = response;
+                ctx.status = 404;
+                ctx.body = 'Data not found';
             }
-        })
-            .catch(error => ctx.throw(500, error));
+        });
     }
     /**
      * Create contact
@@ -54,18 +54,30 @@ class ContactController {
      * @access    public
      * @return    {json} mixed
      */
-    create(ctx) {
-        const { name, mobile } = ctx.request.body;
-        const contact = new Contact_1.default({
-            name, mobile
+    static create(ctx) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { body, body: { name, email, mobile } } = ctx.request;
+            const validate = contactValidator_1.default(body);
+            const exist = yield Contact_1.default.find({ mobile });
+            if (!validate.isValid) {
+                ctx.status = 400;
+                ctx.body = validate.error;
+            }
+            else if (exist.length > 0) {
+                ctx.status = 400;
+                ctx.body = 'Mobile number is already exists';
+            }
+            else {
+                const contact = new Contact_1.default({
+                    name, email, mobile
+                });
+                // save the user contained in the POST body
+                const user = yield contact.save();
+                // return CREATED status code and updated user
+                ctx.status = 201;
+                ctx.body = user;
+            }
         });
-        contact.save()
-            .then(response => {
-            ctx.status = 201;
-            ctx.body = response;
-        })
-            .catch(error => ctx.throw(500, error));
-        ctx.body = ctx.request.body;
     }
     /**
      * Update contact
@@ -73,14 +85,20 @@ class ContactController {
      * @access    public
      * @return    {json} mixed
      */
-    update(ctx) {
-        const { mobile } = ctx.params;
-        const { body } = ctx.request;
-        Contact_1.default.findOneAndUpdate({ mobile }, { $set: body }, { new: true })
-            .then(response => {
-            ctx.body = response;
-        })
-            .catch(error => ctx.throw(500, error));
+    static update(ctx) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { mobile } = ctx.params;
+            const { name, email } = ctx.request.body;
+            const contact = yield Contact_1.default.findOneAndUpdate({ mobile }, { $set: { name, email } });
+            if (contact) {
+                ctx.status = 200;
+                ctx.body = contact;
+            }
+            else {
+                ctx.status = 400;
+                ctx.body = 'Contact doesn\'t exist in the db';
+            }
+        });
     }
     /**
      * Delete contact
@@ -88,13 +106,19 @@ class ContactController {
      * @access    public
      * @return    {json} mixed
      */
-    remove(ctx) {
-        const { mobile } = ctx.params.body;
-        Contact_1.default.findOneAndDelete({ mobile })
-            .then(response => {
-            ctx.body = Object.assign({ message: "Deleted Successfully" }, response);
-        })
-            .catch(error => ctx.throw(500, error));
+    static remove(ctx) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { mobile } = ctx.params;
+            const contact = yield Contact_1.default.findOneAndDelete({ mobile });
+            if (contact) {
+                ctx.status = 200;
+                ctx.body = contact;
+            }
+            else {
+                ctx.status = 400;
+                ctx.body = 'Contact doesn\'t exist in the db';
+            }
+        });
     }
 }
 exports.default = ContactController;

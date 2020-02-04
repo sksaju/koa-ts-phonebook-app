@@ -2,6 +2,7 @@ import Application from "koa";
 import cors from "@koa/cors";
 import bodyParser from "koa-bodyparser";
 import mongoose from "mongoose";
+import appConfig from './config/app';
 import routes from './routes';
 
 class App {
@@ -21,8 +22,9 @@ class App {
     }
 
     private _setMongoConfig() {
+        const { MONGO_URL } = appConfig;
         mongoose.Promise = global.Promise;
-        mongoose.connect('mongodb://mongo/Phonebook', {
+        mongoose.connect(MONGO_URL, {
             useNewUrlParser: true
         })
         .then(() => console.log('MongoDB Connected'))
