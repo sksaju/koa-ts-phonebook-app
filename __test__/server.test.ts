@@ -1,5 +1,5 @@
 import supertest from 'supertest';
-import appConfig from '../src/config/app';
+import config from '../src/config/app';
 import App from '../src/app';
 
 describe('Server is live', () => {
@@ -10,6 +10,6 @@ describe('Server is live', () => {
 		const res = await supertest(server).get('/');
 
 		expect(res.status).toEqual(200);
-		expect(res.text).toEqual(appConfig.DEFAULT_LIVE_MESSAGE);
+		expect(res.text).toEqual(config.DEFAULT_LIVE_MESSAGE);
 	});
 });

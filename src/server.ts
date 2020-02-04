@@ -1,6 +1,6 @@
 import Koa from "koa";
 import App from "./app";
-import appConfig from './config/app';
+import config from './config/app';
 
 class Server {
     constructor(public app: Koa) {
@@ -8,7 +8,7 @@ class Server {
     }
 
     public start() {
-        const { PORT } = appConfig;
+        const { PORT } = config;
         console.log(`Phonebook app listening on port ${PORT}`)
         return this.app.listen(PORT);
     }

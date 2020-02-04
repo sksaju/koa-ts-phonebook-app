@@ -1,12 +1,12 @@
 import Router from "koa-router";
 import contactCtrl from './controllers/ContactController';
-import appConfig from './config/app';
+import config from './config/app';
 
 export default () => {
     const router = new Router();
 
     router.get('/', async ctx => {
-        ctx.body = appConfig.DEFAULT_LIVE_MESSAGE;
+        ctx.body = config.DEFAULT_LIVE_MESSAGE;
     });
     /* contact apis */
     const contactUrl = '/api/contacts/';
