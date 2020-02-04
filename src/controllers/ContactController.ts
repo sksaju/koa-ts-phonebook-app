@@ -1,5 +1,6 @@
-import { Context } from "koa";
+import { Context } from 'koa';
 import Contact from '../models/Contact';
+import validator from '../validators/contactValidator';
 
 class ContactController {
 
@@ -9,12 +10,10 @@ class ContactController {
      * @access    public
      * @return    {json} mixed
      */
-    findAll( ctx: Context ) {
-        Contact.find()
-            .then( response => {
-                ctx.body = response;
-            })
-            .catch( error => ctx.throw(500, error) );
+    public static async findAll(ctx: Context) {
+        const contacts = await Contact.find();
+        ctx.status = 200;
+        ctx.body = contacts;
     }
 
     /**
@@ -23,17 +22,16 @@ class ContactController {
      * @access    public
      * @return    {json} mixed
      */
-    findByMobile( ctx: Context ) {
-        const { mobile } = ctx.request.body;
-        Contact.find( {mobile} )
-            .then( response => {
-                if ( !response ) {
-                    ctx.throw(404, "Data not found");
-                } else {
-                    ctx.body = response;
-                }
-            })
-            .catch( error => ctx.throw(500, error) );
+    public static async findByMobile(ctx: Context) {
+        const { mobile } = ctx.params;
+        const contact = await Contact.find({ mobile });
+        if (contact) {
+            ctx.status = 200;
+            ctx.body = contact;
+        } else {
+            ctx.status = 404;
+            ctx.body = 'Data not found';
+        }
     }
 
     /**
@@ -42,19 +40,27 @@ class ContactController {
      * @access    public
      * @return    {json} mixed
      */
-    create( ctx: Context ) {
-        const { name, mobile } = ctx.request.body;
-
-        const contact = new Contact({
-            name, mobile
-        });
-
-        contact.save()
-            .then( response => {
-                ctx.status = 201;
-                ctx.body = response;
-            })
-            .catch( error => ctx.throw(500, error) );
+    public static async create(ctx: Context) {
+        const { body, body: { name, email, mobile } } = ctx.request;
+        const validate: any = validator(body);
+        const exist: any = await Contact.find({ mobile });
+        
+        if (!validate.isValid) {
+            ctx.status = 400;
+            ctx.body = validate.error;
+        } else if (exist.length > 0) {
+            ctx.status = 400;
+            ctx.body = 'Mobile number is already exists';
+        } else {
+            const contact = new Contact({
+                name, email, mobile
+            });
+            // save the user contained in the POST body
+            const user = await contact.save();
+            // return CREATED status code and updated user
+            ctx.status = 201;
+            ctx.body = user;
+        }
     }
 
     /**
@@ -63,13 +69,17 @@ class ContactController {
      * @access    public
      * @return    {json} mixed
      */
-    update( ctx: Context ) {
-        const { body, body: { mobile } } = ctx.request;
-        Contact.findOneAndUpdate( {mobile}, { $set: body }, {new: true} )
-            .then(response => {
-                ctx.body = response;
-            })
-            .catch( error => ctx.throw(500, error) );
+    public static async update(ctx: Context) {
+        const { mobile } = ctx.params;
+        const { name, email } = ctx.request.body;
+        const contact = await Contact.findOneAndUpdate({ mobile }, { $set: { name, email } });
+        if (contact) {
+            ctx.status = 200;
+            ctx.body = contact;
+        } else {
+            ctx.status = 400;
+            ctx.body = 'Contact doesn\'t exist in the db';
+        }
     }
 
     /**
@@ -78,16 +88,16 @@ class ContactController {
      * @access    public
      * @return    {json} mixed
      */
-    remove(ctx: Context) {
-        const { mobile } = ctx.request.body;
-        Contact.findOneAndDelete( { mobile } )
-            .then(response => {
-                ctx.body = {
-                    message: "Deleted Successfully",
-                    ...response
-                };
-            })
-            .catch( error => ctx.throw(500, error) );
+    public static async remove(ctx: Context) {
+        const { mobile } = ctx.params;
+        const contact = await Contact.findOneAndDelete({ mobile });
+        if (contact) {
+            ctx.status = 200;
+            ctx.body = contact;
+        } else {
+            ctx.status = 400;
+            ctx.body = 'Contact doesn\'t exist in the db';
+        }
     }
 }
 

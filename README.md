@@ -1,5 +1,5 @@
 # Koa Phonebook REST App
-Building a simple Phonebook REST App using Node.js, TypeScript, Koa.js and MongoDB.
+Building a simple Phonebook REST App using TypeScript, Node.js, Koa.js and MongoDB.
 
 **Requirements**
 
@@ -43,12 +43,13 @@ Click [here](https://github.com/sksaju/koa-ts-phonebook-app/releases/) then down
 
 ## Main Technologies and libraries
 
+- <a href="https://www.typescriptlang.org/">Typescript</a>
 - <a href="https://nodejs.org/en/">NodeJS</a>
 - <a href="https://koajs.com/#">KoaJS</a>
-- <a href="https://www.typescriptlang.org/">Typescript</a>
 - <a href="https://github.com/koajs/cors">koa-cors</a>
 - <a href="https://github.com/koajs/bodyparser">koa-bodyparser</a>
 - <a href="https://github.com/alexmingoia/koa-router">koa-router</a>
+- <a href="https://jestjs.io/">Jest</a>
 
 ## Contributing
 

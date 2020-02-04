@@ -1,15 +1,16 @@
 import Router from "koa-router";
-import ContactController from './controllers/ContactController';
+import contactCtrl from './controllers/ContactController';
 
-const routers = new Router();
-const { findAll, create, findByMobile, update, remove } = new ContactController();
+export default () => {
+    const router = new Router();
 
+    /* contact apis */
+    const contactUrl = '/api/contacts/';
+    router.get( contactUrl, contactCtrl.findAll );
+    router.post( contactUrl, contactCtrl.create );
+    router.get( `${contactUrl}:mobile`, contactCtrl.findByMobile );
+    router.put( `${contactUrl}:mobile`, contactCtrl.update );
+    router.delete( `${contactUrl}:mobile`, contactCtrl.remove );
 
-//CONTACT ROUTES
-routers.get( '/api/contacts/', findAll );
-routers.get( '/api/contacts/:mobile', findByMobile );
-routers.post( '/api/contacts/', create );
-routers.put( '/api/contacts/:mobile', update );
-routers.delete( '/api/contacts/:mobile', remove );
-
-export default routers;
+    return router.routes();
+}

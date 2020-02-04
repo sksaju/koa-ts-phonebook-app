@@ -11,7 +11,7 @@ class Server {
     }
     start() {
         const port = process.env.PORT || 3000;
-        process.stdout.write(`Phonebook app listening on port ${port}`);
+        console.log(`Phonebook app listening on port ${port}`);
         mongoose_1.default.Promise = global.Promise;
         mongoose_1.default.connect('mongodb://mongo/Phonebook', {
             useNewUrlParser: true
