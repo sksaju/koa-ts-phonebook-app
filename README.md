@@ -43,8 +43,11 @@ Click [here](https://github.com/sksaju/koa-ts-phonebook-app/releases/) then down
 
 ## Main Technologies and libraries
 
-- <a href="https://www.typescriptlang.org/">Typescript</a>
+- <a href="https://typescriptlang.org/">Typescript</a>
 - <a href="https://nodejs.org/en/">NodeJS</a>
+- <a href="https://nodemon.io/">Nodemon</a>
+- <a href="https://mongodb.com/">MongoDB</a>
+- <a href="https://mongoosejs.com/">Mongoose</a>
 - <a href="https://koajs.com/#">KoaJS</a>
 - <a href="https://github.com/koajs/cors">koa-cors</a>
 - <a href="https://github.com/koajs/bodyparser">koa-bodyparser</a>
