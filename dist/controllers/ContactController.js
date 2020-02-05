@@ -71,9 +71,8 @@ class ContactController {
                 const contact = new Contact_1.default({
                     name, email, mobile
                 });
-                // save the user contained in the POST body
                 const user = yield contact.save();
-                // return CREATED status code and updated user
+                // return CREATED status code and contact
                 ctx.status = 201;
                 ctx.body = user;
             }
